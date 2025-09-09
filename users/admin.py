@@ -4,4 +4,3 @@ from .models import UserModel
 
 admin.site.register(UserModel)
 
-
