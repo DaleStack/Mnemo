@@ -24,7 +24,7 @@ class TaskModel(models.Model):
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    embedding = models.VectorField(dimensions=768, null=True, blank=True)
+    embedding = VectorField(dimensions=768, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.embedding:
