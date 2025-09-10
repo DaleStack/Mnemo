@@ -36,7 +36,9 @@ ROLE_CHOICES = [
 ]
     
 class FolderMember(models.Model):
-    folder = models.ForeignKey(FolderModel, on_delete=models.CASCADE, related_name='members')
+    folder = models.ForeignKey(FolderModel, 
+                               on_delete=models.CASCADE, 
+                               related_name='members')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     joined_at = models.DateTimeField(auto_now_add=True)
     role = models.CharField(max_length=50, choices=ROLE_CHOICES, default='member')
