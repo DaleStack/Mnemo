@@ -27,10 +27,13 @@ class TaskModel(models.Model):
     embedding = VectorField(dimensions=768, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        if not self.embedding:
-            """Use description if available, otherwise fallback to title"""
+        """if not self.embedding:
+                # Use description if available, otherwise fallback to title
             text_to_embed = self.description or self.title
-            self.embedding = get_embedding(text_to_embed)
+            self.embedding = get_embedding(text_to_embed)"""
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
 
 
