@@ -2,7 +2,6 @@ from django.db import models
 from folders.models import FolderModel
 from django.conf import settings
 from pgvector.django import VectorField
-from utils import get_embedding
 # Create your models here.
 
 PRIORITY_CHOICES = [
