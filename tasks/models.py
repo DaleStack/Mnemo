@@ -2,6 +2,7 @@ from django.db import models
 from folders.models import FolderModel
 from django.conf import settings
 from pgvector.django import VectorField
+from utils import get_embedding
 # Create your models here.
 
 PRIORITY_CHOICES = [
@@ -24,5 +25,12 @@ class TaskModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     embedding = models.VectorField(dimensions=768, null=True, blank=True)
-    
+
+    def save(self, *args, **kwargs):
+        if not self.embedding:
+            """Use description if available, otherwise fallback to title"""
+            text_to_embed = self.description or self.title
+            self.embedding = get_embedding(text_to_embed)
+        super().save(*args, **kwargs)
+
 
