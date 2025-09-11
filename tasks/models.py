@@ -47,6 +47,18 @@ class CommentModel(models.Model):
     def __str__(self):
         return self.content[:20]
     
+class UserEmailNotification(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+                             related_name='user_notifications')
+    task = models.ForeignKey(TaskModel, on_delete=models.CASCADE,
+                             related_name='task_notifications')
+    reminder_sent = models.BooleanField(default=False)
+    deadline_sent = models.BooleanField(default=False)
+    reminder_sent_at = models.DateTimeField(auto_now_add=True)
+    deadline_sent_at = models.DateTimeField(auto_now_add=True)    
+
+    def __str__(self):
+        return f"Notifications for {self.user.username} on task {self.task.title}"
 
 
 
