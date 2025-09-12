@@ -7,6 +7,7 @@ from django.contrib import messages
 
 
 def user_register(request):
+    """ For Registering Users """
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -22,6 +23,7 @@ def user_register(request):
     return render(request, 'users/register.html', {'form': form})
 
 def user_login(request):
+    """ For authenticating users upon login """
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
         if form.is_valid():
@@ -41,6 +43,7 @@ def user_login(request):
 
 
 def user_logout(request):
+    """ Logging out users """
     logout(request)
     messages.success(request, 'Logged out')
     return redirect('user_login')
