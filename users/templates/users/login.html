@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="">
-    <form class="flex flex-col w-80" action="{% url 'user_register' %}" method="POST">
+    <form class="flex flex-col w-80" action="{% url 'user_login' %}" method="POST">
         {% csrf_token %}
         
         <input class="outline outline-black" type="text" name="username" placeholder="username">
@@ -12,22 +12,12 @@
             <div class="error">{{ form.username.errors.0 }}</div>
         {% endif %}
 
-        <input class="outline outline-black" type="email" name="email" placeholder="email">
-        {% if form.email.errors %}
-            <div class="error">{{ form.email.errors.0 }}</div>
+        <input class="outline outline-black" type="password" name="password" placeholder="password">
+        {% if form.password.errors %}
+            <div class="error">{{ form.password.errors.0 }}</div>
         {% endif %}
 
-        <input class="outline outline-black" type="password" name="password1" placeholder="password">
-        {% if form.password1.errors %}
-            <div class="error">{{ form.password1.errors.0 }}</div>
-        {% endif %}
-
-        <input class="outline outline-black" type="password" name="password2" placeholder="confirm password">
-        {% if form.password2.errors %}
-            <div class="error">{{ form.password2.errors.0 }}</div>
-        {% endif %}
-
-        <button type="submit">register</button>
+        <button type="submit">login</button>
     </form>
 
     {% if form.non_field_errors %}
