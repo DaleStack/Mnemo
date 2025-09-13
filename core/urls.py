@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('users.urls')),
     path('mnemo/', include('folders.urls')),
+    path('mnemo/', include('tasks.urls')),
 ]
 
 if settings.DEBUG:

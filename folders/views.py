@@ -68,12 +68,16 @@ def folder_view(request, folder_id):
     # Get the current user's membership (to know their role)
     membership = FolderMember.objects.get(folder=folder, user=request.user)
 
+    # Get all tasks in this folder, ordered by creation date (newest first)
+    tasks = folder.tasks.all().order_by('-created_at')
+
     return render(
         request,
         'folders/folder_detail.html',
         {
             'folder': folder,
-            'membership': membership
+            'membership': membership,
+            'tasks': tasks,
         }
     )
 

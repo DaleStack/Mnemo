@@ -26,4 +26,48 @@
     {% endfor %}
 </ul>
 
+<h3>Create a Task</h3>
+<form method="post" action="{% url 'create_task' folder.id %}">
+    {% csrf_token %}
+    <input type="text" name="title" placeholder="Task title" required>
+    <input type="text" name="description" placeholder="Task description">
+    <input type="text" name="task_link" placeholder="Task link">
+    <input type="date" id="due_date" name="due_date" required>
+    <input type="date" id="reminder_date" name="reminder_date" required>
+    <select name="priority" required>
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+    </select>
+    <button type="submit">Create Task</button>
+</form>
+
+<h3>Tasks</h3>
+<ul>
+    {% for task in tasks %}
+        <li>
+            <strong>{{ task.title }}</strong> 
+            (Priority: {{ task.priority|title }})<br>
+
+            {% if task.description %}
+                <em>{{ task.description }}</em><br>
+            {% endif %}
+
+            {% if task.task_link %}
+                <a href="{{ task.task_link }}" target="_blank">Task Link</a><br>
+            {% endif %}
+
+            <small>
+                Due: {{ task.due_date }} |
+                Reminder: {{ task.reminder_date }}<br>
+                Created by: {{ task.created_by.username }} |
+                Created at: {{ task.created_at|date:"Y-m-d H:i" }}
+            </small>
+        </li>
+        <hr>
+    {% empty %}
+        <li>No tasks yet.</li>
+    {% endfor %}
+</ul>
+
 {% endblock %}
