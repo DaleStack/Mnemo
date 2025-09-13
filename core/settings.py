@@ -159,6 +159,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 AUTH_USER_MODEL = "users.UserModel"
 
+# EMAIL SETTINGS SMTP
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'        # or your SMTP provider
 EMAIL_PORT = 587
@@ -167,6 +168,15 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  # use an App Password if using Gmail
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+# CELERY SETTINGS
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_BEAT_SCHEDULE = {
+    'send-task-reminders-every-hour': {
+        'task': 'tasks.tasks.check_and_send_reminders',
+        'schedule': 3600,  # every hour
+    },
+}
 
 LOGIN_URL = 'user_login'
 LOGIN_REDIRECT_URL = 'home'

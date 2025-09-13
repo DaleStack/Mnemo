@@ -30,7 +30,7 @@
 <form method="post" action="{% url 'create_task' folder.id %}">
     {% csrf_token %}
     <input type="text" name="title" placeholder="Task title" required>
-    <input type="text" name="description" placeholder="Task description">
+    <textarea name="description" placeholder="Task description"></textarea>
     <input type="text" name="task_link" placeholder="Task link">
     <input type="date" id="due_date" name="due_date" required>
     <input type="date" id="reminder_date" name="reminder_date" required>

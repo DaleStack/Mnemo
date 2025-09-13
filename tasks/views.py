@@ -6,7 +6,7 @@ from .forms import CreateTaskForm
 from folders.models import FolderModel, FolderMember
 from django.views.decorators.http import require_POST
 from django.urls import reverse
-from .utils import send_task_created_email
+from .tasks import send_task_created_email
 # Create your views here.
 
 @login_required
@@ -25,8 +25,8 @@ def create_task(request, folder_id):
                 reverse('task_detail', args=[folder.id, task.id])
             )
 
-            send_task_created_email(task, task_url)
-            
+            send_task_created_email.delay(task.id)
+
             messages.success(request, 'Task created successfully!')
         else:
             messages.error(request, 'Error creating task.')
