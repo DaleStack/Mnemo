@@ -63,6 +63,11 @@
                 Created by: {{ task.created_by.username }} |
                 Created at: {{ task.created_at|date:"Y-m-d H:i" }}
             </small>
+
+            <form method="post" action="{% url 'delete_task' folder.id task.id %}">
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+            </form>
         </li>
         <hr>
     {% empty %}
