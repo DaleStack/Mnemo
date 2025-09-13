@@ -5,6 +5,8 @@ from django.contrib import messages
 from .forms import CreateTaskForm
 from folders.models import FolderModel, FolderMember
 from django.views.decorators.http import require_POST
+from django.urls import reverse
+from .utils import send_task_created_email
 # Create your views here.
 
 @login_required
@@ -18,6 +20,13 @@ def create_task(request, folder_id):
             task.folder = folder
             task.created_by = request.user
             task.save()
+
+            task_url = request.build_absolute_uri(
+                reverse('task_detail', args=[folder.id, task.id])
+            )
+
+            send_task_created_email(task, task_url)
+            
             messages.success(request, 'Task created successfully!')
         else:
             messages.error(request, 'Error creating task.')
@@ -41,5 +50,22 @@ def delete_task(request, folder_id, task_id):
     task.delete()
     messages.success(request, 'Task deleted successfully.')
     return redirect('folder_view', folder_id=folder.id)
+
+@login_required
+def task_detail(request, folder_id, task_id):
+    # Ensure the user is a member of the folder
+    folder = get_object_or_404(FolderModel, id=folder_id, members__user=request.user)
+
+    # Get the task inside this folder
+    task = get_object_or_404(TaskModel, id=task_id, folder=folder)
+
+    # Optional: get user role if needed for permissions
+    membership = FolderMember.objects.get(folder=folder, user=request.user)
+
+    return render(request, 'tasks/task_detail.html', {
+        'folder': folder,
+        'task': task,
+        'membership': membership
+    })
 
     
