@@ -25,6 +25,7 @@
     <div>
         <p>{{ folder.subject_name }}</p>
         <p>{{ folder.code }}</p>
+        <a href="{% url 'folder_view' folder.id %}">Click here</a>
     </div>
 
     {% if folder.user == request.user %}

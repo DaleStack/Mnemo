@@ -1,0 +1,17 @@
+{% extends './base.html' %}
+
+{% block content %}
+<h2>{{ folder.subject_name }}</h2>
+<p>Code: {{ folder.code }}</p>
+<p>Owner: {{ folder.user.username }}</p>
+
+<h3>Members</h3>
+<ul>
+    {% for member in folder.members.all %}
+        <li>{{ member.user.username }} - {{ member.role }}</li>
+    {% empty %}
+        <li>No members</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

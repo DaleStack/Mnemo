@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import FolderModel, FolderMember
 from .forms import CreateFolderForm
@@ -59,5 +59,12 @@ def join_folder(request):
 
     else:
         return redirect('home')
+
+@login_required
+def folder_view(request, folder_id):
+    # Only get the folder if the current user is a member or owner
+    folder = get_object_or_404(FolderModel, id=folder_id, members__user=request.user)
+
+    return render(request, 'folders/folder_detail.html', {'folder': folder})
     
                   
