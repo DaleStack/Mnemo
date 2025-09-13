@@ -7,6 +7,13 @@
 </div>
 <a href="{% url 'logout' %}">Logout</a>
 
+<h2>Join Folder</h2>
+<form method="POST" action="{% url 'join_folder' %}">
+  {% csrf_token %}
+  <input type="text" name="code" placeholder="Enter folder code" required>
+  <button type="submit">Join</button>
+</form>
+<h2>Create Folder</h2>
 <form action="{% url 'create_folder' %}" method="POST">
     {% csrf_token %}
     <input type="text" name="subject_name" placeholder="Folder name">
@@ -19,6 +26,12 @@
         <p>{{ folder.subject_name }}</p>
         <p>{{ folder.code }}</p>
     </div>
+
+    {% if folder.user == request.user %}
+      <span class="badge">Owner</span>
+    {% else %}
+      <span class="badge">Member</span>
+    {% endif %}
 {% empty %}
     <p>No folders available.</p>
 {% endfor %}
