@@ -48,3 +48,5 @@ class FolderMember(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.folder.subject_name} ({self.role})"
+    
+    
