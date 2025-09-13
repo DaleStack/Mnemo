@@ -6,4 +6,10 @@
     <p>Hello, {{ user.email }}!</p>
 </div>
 <a href="{% url 'logout' %}">Logout</a>
+
+<form action="{% url 'create_folder' %}" method="POST">
+    {% csrf_token %}
+    <input type="text" name="subject_name" placeholder="Folder name">
+    <button type="submit">Create Folder</button>
+</form>
 {% endblock %}
