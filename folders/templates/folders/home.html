@@ -12,4 +12,15 @@
     <input type="text" name="subject_name" placeholder="Folder name">
     <button type="submit">Create Folder</button>
 </form>
+
+<p>ALL FOLDERS</p>
+{% for folder in folders %}
+    <div>
+        <p>{{ folder.subject_name }}</p>
+        <p>{{ folder.code }}</p>
+    </div>
+{% empty %}
+    <p>No folders available.</p>
+{% endfor %}
+
 {% endblock %}

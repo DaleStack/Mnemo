@@ -8,7 +8,8 @@ from django.contrib import messages
 @login_required
 def home_page(request):
     user = request.user
-    return render(request, 'folders/home.html', {'user':user})
+    folders = FolderModel.objects.filter(user=user)
+    return render(request, 'folders/home.html', {'user':user, 'folders': folders})
 
 @login_required
 def create_folder(request):
