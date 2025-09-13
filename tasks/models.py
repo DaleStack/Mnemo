@@ -52,10 +52,16 @@ class UserEmailNotification(models.Model):
                              related_name='user_notifications')
     task = models.ForeignKey(TaskModel, on_delete=models.CASCADE,
                              related_name='task_notifications')
+    
+    # Flags for different notification types
     reminder_sent = models.BooleanField(default=False)
     deadline_sent = models.BooleanField(default=False)
-    reminder_sent_at = models.DateTimeField(auto_now_add=True)
-    deadline_sent_at = models.DateTimeField(auto_now_add=True)    
+    joined_sent = models.BooleanField(default=False)
+
+    # Timestamps should be nullable and set manually when the action occurs
+    reminder_sent_at = models.DateTimeField(null=True, blank=True)
+    deadline_sent_at = models.DateTimeField(null=True, blank=True)
+    joined_sent_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"Notifications for {self.user.username} on task {self.task.title}"

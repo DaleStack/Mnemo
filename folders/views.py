@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import FolderModel, FolderMember
 from .forms import CreateFolderForm
 from django.contrib import messages
+from tasks.tasks import send_notifications_for_new_folder_member
 # Create your views here.
 
 @login_required
@@ -38,6 +39,7 @@ def create_folder(request):
 def join_folder(request):
     if request.method == 'POST':
         code = request.POST.get('code')  # get the code from a form input
+        user = request.user
         try:
             folder = FolderModel.objects.get(code=code)
         except FolderModel.DoesNotExist:
@@ -49,16 +51,20 @@ def join_folder(request):
             messages.info(request, 'You are already a member of this folder')
             return redirect('home')
 
+        
         FolderMember.objects.create(
             folder=folder,
             user=request.user,
             role='member'
         )
+
+        # trigger reminders check just for this new user
+        send_notifications_for_new_folder_member.delay(user.id, folder.id)
+
         messages.success(request, f'Joined folder: {folder.subject_name}')
         return redirect('home')
 
-    else:
-        return redirect('home')
+    return redirect('home')
 
 @login_required
 def folder_view(request, folder_id):

@@ -14,6 +14,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 import dj_database_url
+from celery.schedules import crontab
 
 load_dotenv()
 
@@ -172,9 +173,9 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_BEAT_SCHEDULE = {
-    'send-task-reminders-every-hour': {
-        'task': 'tasks.tasks.check_and_send_reminders',
-        'schedule': 3600,  # every hour
+    'send-task-reminders-and-deadlines': {
+        'task': 'tasks.tasks.check_and_send_reminders_and_deadlines',
+        'schedule': crontab(hour='8,20', minute=0),  # 8AM and 8PM
     },
 }
 
