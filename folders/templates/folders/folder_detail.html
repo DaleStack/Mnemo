@@ -5,6 +5,18 @@
 <p>Code: {{ folder.code }}</p>
 <p>Owner: {{ folder.user.username }}</p>
 
+{% if membership.role == "owner" %}
+    <form action="{% url 'delete_folder' folder.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Delete Folder</button>
+    </form>
+{% else %}
+    <form action="{% url 'leave_folder' folder.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Leave Folder</button>
+    </form>
+{% endif %}
+
 <h3>Members</h3>
 <ul>
     {% for member in folder.members.all %}

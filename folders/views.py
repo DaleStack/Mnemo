@@ -62,9 +62,53 @@ def join_folder(request):
 
 @login_required
 def folder_view(request, folder_id):
-    # Only get the folder if the current user is a member or owner
+    # Only get the folder if the current user is a member
     folder = get_object_or_404(FolderModel, id=folder_id, members__user=request.user)
 
-    return render(request, 'folders/folder_detail.html', {'folder': folder})
+    # Get the current user's membership (to know their role)
+    membership = FolderMember.objects.get(folder=folder, user=request.user)
+
+    return render(
+        request,
+        'folders/folder_detail.html',
+        {
+            'folder': folder,
+            'membership': membership
+        }
+    )
+
     
-                  
+@login_required
+def leave_folder(request, folder_id):
+    """Let a member leave the folder (but owner cannot leave)."""
+    folder = get_object_or_404(FolderModel, id=folder_id, members__user=request.user)
+
+    # Get the membership
+    membership = get_object_or_404(FolderMember, folder=folder, user=request.user)
+
+    # Prevent owner from leaving their own folder
+    if membership.role == 'owner':
+        messages.error(request, "Owners cannot leave their own folder. Delete it instead.")
+        return redirect('folder_view', folder_id=folder.id)
+
+    # Delete membership
+    membership.delete()
+    messages.success(request, f"You have left the folder: {folder.subject_name}")
+    return redirect('home')
+
+
+@login_required
+def delete_folder(request, folder_id):
+    """Let the owner delete the folder and all its members/tasks."""
+    folder = get_object_or_404(FolderModel, id=folder_id, members__user=request.user)
+
+    # Verify the user is owner
+    membership = get_object_or_404(FolderMember, folder=folder, user=request.user)
+    if membership.role != 'owner':
+        messages.error(request, "Only the owner can delete this folder.")
+        return redirect('folder_view', folder_id=folder.id)
+
+    # Delete the folder (will cascade to members/tasks)
+    folder.delete()
+    messages.success(request, "Folder deleted successfully.")
+    return redirect('home')
